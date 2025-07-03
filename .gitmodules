@@ -1,0 +1,3 @@
+[submodule "adminpanel"]
+	path = adminpanel
+	url = https://github.com/yourusername/adminpanel.git
