@@ -1,6 +1,0 @@
-[submodule "adminpanel"]
-	path = adminpanel
-	url = https://github.com/yourusername/adminpanel.git
-[submodule "foodiesapi"]
-	path = foodiesapi
-	url = https://github.com/yourusername/foodiesapi.git
