@@ -6,7 +6,7 @@ const Header = () => {
         <div className="container-fluid py-5">
             <h1 className="display-5 fw-bold">Order your favorite food here</h1>
             <p className="col-md- fs-4">Discover the best food and drinks in town</p>
-            <Link to = '/explore' className='btn btn-primary btn-lg'>Explore</Link>
+            <Link to = '/explore' className='btn btn-primary'>Explore</Link>
         </div>
     </div>
   )

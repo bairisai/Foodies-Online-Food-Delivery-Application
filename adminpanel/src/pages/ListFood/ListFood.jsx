@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { deleteFood, getFoodList } from '../../services/FoodSerrvice';
+import { deleteFood, getFoodList } from '../../services/FoodService';
 import { toast } from 'react-toastify';
 import './ListFood.css';
 const ListFood = () => {

@@ -1,6 +1,6 @@
 import React, {useState } from 'react';
 import { assets } from '../../assets/assets';
-import { addFood } from '../../services/FoodSerrvice';
+import { addFood } from '../../services/FoodService';
 import { toast } from 'react-toastify';
 const AddFood = () => {
   const [image, setImage] = useState(false);
@@ -65,12 +65,13 @@ const AddFood = () => {
               <div className="mb-3">
                 <label htmlFor="name" className="form-label">Category</label>
                 <select name="category" id="category" className='form-control' onChange={onChangeHandler} value={data.category}>
-                  <option value="select">Select</option>
-                  <option value="Cakes">Cakes</option>
-                  <option value="Burger">Burger</option>
-                  <option value="French Fries">French Fries</option>
-                  <option value="Chinese">Chinese</option>
-                  <option value="Pizza">Pizza</option>
+                  <option value="biryani">Biryani</option>
+                  <option value="burger">Burger</option>
+                  <option value="cakes">Cakes</option>
+                  <option value="icecream">Ice cream</option>
+                  <option value="pizza">Pizza</option>
+                  <option value="rolls">Rolls</option>
+                  <option value="salad">Salad</option>
                 </select>
                 <div className="mb-3">
                 <label htmlFor="price" className="form-label">Price</label>
