@@ -33,3 +33,8 @@
  background-color: #e2e2e2;
  border: none;
 }
+
+.explore-menu-list-items .active {
+    border: 5px solid tomato;
+    padding: 2px;
+}

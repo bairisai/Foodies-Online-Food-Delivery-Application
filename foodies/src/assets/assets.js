@@ -15,31 +15,31 @@ export const assets = {
 
 export const categories = [
     {
-        category : 'Biryani',
+        category : 'biryani',
         icon : biryani
     },
     {
-        category : 'Burger',
+        category : 'burger',
         icon : burger
     },
     {
-        category : 'Cakes',
+        category : 'cakes',
         icon : cakes
     },
     {
-        category : 'Ice cream',
+        category : 'icecream',
         icon : icecream
     },
     {
-        category : 'Pizza',
+        category : 'pizza',
         icon : pizza
     },
     {
-        category : 'Rolls',
+        category : 'rolls',
         icon : rolls
     },
     {
-        category : 'Salad',
+        category : 'salad',
         icon : salad
     },
 ]

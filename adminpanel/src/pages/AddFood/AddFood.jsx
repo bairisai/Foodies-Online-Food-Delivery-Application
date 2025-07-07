@@ -7,7 +7,7 @@ const AddFood = () => {
   const [data, setData] = useState({
     name: '',
     description:'',
-    category: 'Select',
+    category: 'biryani',
     price: ''
   });
 
@@ -30,7 +30,7 @@ const AddFood = () => {
       setData({
         name: '',
         description:'',
-        category: 'Select',
+        category: 'biryani',
         price: ''
       });
       setImage(null);      
