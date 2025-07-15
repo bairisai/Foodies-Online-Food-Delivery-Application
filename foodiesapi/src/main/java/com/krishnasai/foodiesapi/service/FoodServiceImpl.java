@@ -4,7 +4,6 @@ import com.krishnasai.foodiesapi.entity.FoodEntity;
 import com.krishnasai.foodiesapi.io.FoodRequest;
 import com.krishnasai.foodiesapi.io.FoodResponse;
 import com.krishnasai.foodiesapi.repository.FoodRepository;
-import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;

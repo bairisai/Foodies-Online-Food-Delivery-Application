@@ -1,7 +1,7 @@
-import React, { useEffect, useState } from 'react';
-import { deleteFood, getFoodList } from '../../services/FoodService';
-import { toast } from 'react-toastify';
-import './ListFood.css';
+import React, { useEffect, useState } from "react";
+import { deleteFood, getFoodList } from "../../services/FoodService";
+import { toast } from "react-toastify";
+import "./ListFood.css";
 const ListFood = () => {
   const [list, setList] = useState([]);
   const fetchList = async () => {
@@ -9,23 +9,23 @@ const ListFood = () => {
       const data = await getFoodList();
       setList(data);
     } catch (error) {
-      toast.error('Error while fetching the foodlist');
+      toast.error("Error while fetching the foodlist");
     }
-  }
+  };
 
   const removeFood = async (foodId) => {
     try {
       const success = await deleteFood(foodId);
       if (success) {
-        toast.success('Food removed!');
+        toast.success("Food removed!");
         await fetchList();
       } else {
-        toast.error('Error while removing the Food ');
+        toast.error("Error while removing the Food ");
       }
     } catch (error) {
-      toast.error('Error while removing the Food ');
+      toast.error("Error while removing the Food ");
     }
-  }
+  };
 
   useEffect(() => {
     fetchList();
@@ -44,26 +44,29 @@ const ListFood = () => {
             </tr>
           </thead>
           <tbody>
-            {
-              list.map((item, index) => {
-                return (
-                  <tr key = {index}>
-                    <td><img src={item.imageUrl} alt="" height={48} width={48}/></td>
-                    <td>{item.name}</td>
-                    <td>{item.category}</td>
-                    <td>&#8377;{item.price}.00</td>
-                    <td className='text-danger'>
-                      <i className='bi bi-x-circle-fill' onClick={() => removeFood(item.id)}></i>
-                    </td>
-                  </tr>
-                )
-              })
-            }
+            {list.map((item, index) => {
+              return (
+                <tr key={index}>
+                  <td>
+                    <img src={item.imageUrl} alt="" height={48} width={48} />
+                  </td>
+                  <td>{item.name}</td>
+                  <td>{item.category}</td>
+                  <td>&#8377;{item.price}.00</td>
+                  <td className="text-danger">
+                    <i
+                      className="bi bi-x-circle-fill"
+                      onClick={() => removeFood(item.id)}
+                    ></i>
+                  </td>
+                </tr>
+              );
+            })}
           </tbody>
         </table>
       </div>
     </div>
-  )
-}
+  );
+};
 
 export default ListFood;
