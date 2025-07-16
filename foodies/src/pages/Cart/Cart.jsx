@@ -2,14 +2,14 @@ import React, { useContext } from "react";
 import "./Cart.css";
 import { StoreContext } from "../../context/StoreContext";
 import { Link, useNavigate } from "react-router-dom";
-
+import { calculateCartTotal } from "../../util/cartUtils";
 const Cart = () => {
   const navigate = useNavigate();
 
   const { foodList, increaseQty, decreaseQty, quantities, removeFromCart } =
     useContext(StoreContext);
   const cartItems = foodList.filter((food) => quantities[food.id] > 0);
-  const { tax, total, shippingCharge } = calculateCartTotal(
+  const { subTotal, tax, total, shippingCharge } = calculateCartTotal(
     cartItems,
     quantities
   );

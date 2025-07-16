@@ -170,6 +170,7 @@ const PlaceOrder = () => {
                     type="text"
                     className="form-control"
                     id="zip"
+                    placeholder="506002"
                     required
                   />
                 </div>
