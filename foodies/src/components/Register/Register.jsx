@@ -1,8 +1,19 @@
-import React from "react";
+import React, { useState } from "react";
 import "./Register.css";
 import { Link } from "react-router-dom";
 
 const Register = () => {
+  const [data, setData] = useState({
+    name: "",
+    email: "",
+    password: "",
+  });
+
+  const onChangeHandler = (event) => {
+    const name = event.target.name;
+    const value = event.target.name;
+    setData((data) => ({ ...data, [name]: value }));
+  };
   return (
     <div className="register-container">
       <div className="container mt-4">
