@@ -1,7 +1,38 @@
-import React from "react";
+import React, { use, useState } from "react";
 import "./Login.css";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import axios from "axios";
+import { toast } from "react-toastify";
+import { loginUser } from "../../service/authService";
 const Login = () => {
+  const navigate = useNavigate();
+  const [data, setData] = useState({
+    email: "",
+    password: "",
+  });
+
+  const onChangeHandler = (event) => {
+    const name = event.target.name;
+    const value = event.target.value;
+    setData((data) => ({ ...data, [name]: value }));
+  };
+
+  const onSubmitHandler = async (event) => {
+    event.preventDefault();
+    console.log(data);
+    try {
+      const response = await loginUser(data);
+      if (response === 200) {
+        toast.success("Login successful.");
+        navigate("/home");
+      } else {
+        toast.error("Error logging in!");
+      }
+    } catch (error) {
+      console.log(error);
+      toast.error("Error logging in!");
+    }
+  };
   return (
     <div className="login-container">
       <div className="container mt-4">
@@ -12,13 +43,17 @@ const Login = () => {
                 <h5 className="card-title text-center mb-5 fw-light fs-5">
                   Sign In
                 </h5>
-                <form>
+                <form onSubmit={onSubmitHandler}>
                   <div className="form-floating mb-3">
                     <input
                       type="email"
                       className="form-control"
                       id="floatingInput"
                       placeholder="name@example.com"
+                      name="email"
+                      onChange={onChangeHandler}
+                      value={data.email}
+                      required
                     />
                     <label htmlFor="floatingInput">Email address</label>
                   </div>
@@ -28,6 +63,10 @@ const Login = () => {
                       className="form-control"
                       id="floatingPassword"
                       placeholder="Password"
+                      name="password"
+                      onChange={onChangeHandler}
+                      value={data.password}
+                      required
                     />
                     <label htmlFor="floatingPassword">Password</label>
                   </div>
