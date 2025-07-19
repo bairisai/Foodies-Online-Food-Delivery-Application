@@ -1,11 +1,13 @@
-import React, { use, useState } from "react";
+import React, { useContext, useState } from "react";
 import "./Login.css";
 import { Link, useNavigate } from "react-router-dom";
-import axios from "axios";
 import { toast } from "react-toastify";
-import { loginUser } from "../../service/authService";
+import { login } from "../../service/authService";
+import { StoreContext } from "../../context/StoreContext";
+
 const Login = () => {
   const navigate = useNavigate();
+  const { token, setToken } = useContext(StoreContext);
   const [data, setData] = useState({
     email: "",
     password: "",
@@ -19,12 +21,12 @@ const Login = () => {
 
   const onSubmitHandler = async (event) => {
     event.preventDefault();
-    console.log(data);
     try {
-      const response = await loginUser(data);
-      if (response === 200) {
-        toast.success("Login successful.");
-        navigate("/home");
+      const response = await login(data);
+      if (response.status === 200) {
+        setToken(response.data.token);
+        localStorage.setItem("token", response.data.token);
+        navigate("/");
       } else {
         toast.error("Error logging in!");
       }
