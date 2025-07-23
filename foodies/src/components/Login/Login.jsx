@@ -7,7 +7,7 @@ import { StoreContext } from "../../context/StoreContext";
 
 const Login = () => {
   const navigate = useNavigate();
-  const { token, setToken } = useContext(StoreContext);
+  const { setToken, loadCartData } = useContext(StoreContext);
   const [data, setData] = useState({
     email: "",
     password: "",
@@ -26,6 +26,7 @@ const Login = () => {
       if (response.status === 200) {
         setToken(response.data.token);
         localStorage.setItem("token", response.data.token);
+        await loadCartData(response.data.token);
         navigate("/");
       } else {
         toast.error("Error logging in!");

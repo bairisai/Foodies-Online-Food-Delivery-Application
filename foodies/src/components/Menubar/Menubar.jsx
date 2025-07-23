@@ -6,13 +6,15 @@ import { StoreContext } from "../../context/StoreContext";
 const Menubar = () => {
   const [active, setActive] = useState("");
   const navigate = useNavigate();
-  const { quantities, token, setToken } = useContext(StoreContext);
+  const { quantities, token, setToken, setQuantities } =
+    useContext(StoreContext);
   const uniqueItemsInCart = Object.values(quantities).filter(
     (qty) => qty > 0
   ).length;
   const logout = () => {
     localStorage.removeItem("token");
     setToken("");
+    setQuantities({});
     navigate("/");
   };
   return (
