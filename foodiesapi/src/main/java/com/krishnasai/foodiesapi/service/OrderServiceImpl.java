@@ -3,24 +3,37 @@ package com.krishnasai.foodiesapi.service;
 import com.krishnasai.foodiesapi.entity.OrderEntity;
 import com.krishnasai.foodiesapi.io.OrderRequest;
 import com.krishnasai.foodiesapi.io.OrderResponse;
+import com.krishnasai.foodiesapi.repository.CartRepository;
 import com.krishnasai.foodiesapi.repository.OrderRepository;
 import com.razorpay.Order;
 import com.razorpay.RazorpayClient;
 import com.razorpay.RazorpayException;
-import lombok.AllArgsConstructor;
-import netscape.javascript.JSObject;
+
 import org.json.JSONObject;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
+
 @Service
-@AllArgsConstructor
 public class OrderServiceImpl implements OrderService{
-    private final OrderRepository orderRepository;
+    @Autowired
+    private  OrderRepository orderRepository;
+
+    @Autowired
+    private  UserService userService;
+
+    @Autowired
+    private CartRepository cartRepository;
+
     @Value("${razorpay_key}")
     private String RAZORPAY_KEY;
     @Value("${razorpay_secret_key}")
     private String RAZORPAY_SECRET_KEY;
+
     @Override
     public OrderResponse createOrderWithPayment(OrderRequest request) throws RazorpayException {
         OrderEntity newOrder = convertToEntity(request);
@@ -29,19 +42,81 @@ public class OrderServiceImpl implements OrderService{
         //create razorpay payment order
         RazorpayClient razorpayClient = new RazorpayClient(RAZORPAY_KEY, RAZORPAY_SECRET_KEY);
         JSONObject orderRequest = new JSONObject();
-        orderRequest.put("amount", newOrder.getAmount());
+        orderRequest.put("amount", newOrder.getAmount() * 100);
         orderRequest.put("currency", "INR");
-        orderRequest.put("paymentCapture", 1);
+        orderRequest.put("payment_capture", 1);
 
         Order razorpayOrder = razorpayClient.orders.create(orderRequest);
         newOrder.setRazorpayOrderId(razorpayOrder.get("id"));
+        String loggedInUserId = userService.findUserId();
+        newOrder.setUserId(loggedInUserId);
+        newOrder = orderRepository.save(newOrder);
+        return convertToResponse(newOrder);
     }
+
+    @Override
+    public void verifyPayment(Map<String, String> paymentData, String status) {
+        String razorpayOrderId = paymentData.get("razorpay_order_id");
+        OrderEntity existingOrder = orderRepository.findOrderByRazorpayOrderId(razorpayOrderId)
+                .orElseThrow(() -> new RuntimeException("Order not found"));
+        existingOrder.setPaymentStatus(status);
+        existingOrder.setRazorpaySignature(paymentData.get("razorpay_signature"));
+        existingOrder.setRazorpayPaymentId(paymentData.get("razorpay_payment_id"));
+        orderRepository.save(existingOrder);
+        if ("paid".equalsIgnoreCase(status)) {
+            cartRepository.deleteByUserId(existingOrder.getUserId());
+        }
+    }
+
+    @Override
+    public List<OrderResponse> getUserOrders() {
+        String loggedInUser = userService.findUserId();
+        List<OrderEntity> list =  orderRepository.findOrderByUserId(loggedInUser);
+        return list.stream().map(entity -> convertToResponse(entity)).collect(Collectors.toList());
+    }
+
+    @Override
+    public void removeOrder(String orderId) {
+        orderRepository.deleteById(orderId);
+    }
+
+    @Override
+    public List<OrderResponse> getOrdersOfAllUsers() {
+        List<OrderEntity> list = orderRepository.findAll();
+        return list.stream().map(entity -> convertToResponse(entity)).collect(Collectors.toList());
+    }
+
+    @Override
+    public void updateOrderStatus(String orderId, String status) {
+        OrderEntity entity = orderRepository.findById(orderId)
+                .orElseThrow(() -> new RuntimeException("Order not found"));
+        entity.setOrderStatus(status);
+        orderRepository.save(entity);
+    }
+
+    private OrderResponse convertToResponse(OrderEntity entity) {
+        return OrderResponse.builder()
+                .userId(entity.getUserId())
+                .id(entity.getId())
+                .razorpayOrderId(entity.getRazorpayOrderId())
+                .amount(entity.getAmount())
+                .userAddress(entity.getUserAddress())
+                .paymentStatus(entity.getPaymentStatus())
+                .orderStatus(entity.getOrderStatus())
+                .email(entity.getEmail())
+                .phoneNumber(entity.getPhoneNumber())
+                .orderedItems(entity.getOrderedItems())
+                .build();
+    }
+
     private OrderEntity convertToEntity(OrderRequest request) {
         return OrderEntity.builder()
-                .userId(request.getUserId())
+                .userAddress(request.getUserAddress())
                 .amount(request.getAmount())
                 .orderedItems(request.getOrderedItems())
-                .userAddress(request.getUserAddress())
+                .email(request.getEmail())
+                .phoneNumber(request.getPhoneNumber())
+                .orderStatus(request.getOrderStatus())
                 .build();
     }
 }

@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { useContext, useState } from "react";
 import "./PlaceOrder.css";
 import { assets } from "../../assets/assets";
 import { StoreContext } from "../../context/StoreContext";
@@ -6,6 +6,28 @@ import { calculateCartTotal } from "../../util/cartUtils";
 
 const PlaceOrder = () => {
   const { foodList, quantities, setQuantities } = useContext(StoreContext);
+
+  const [data, setData] = useState({
+    firstName: "",
+    lastName: "",
+    email: "",
+    phoneNumber: "",
+    address: "",
+    state: "",
+    city: "",
+    zip: "",
+  });
+
+  const onChangeHandler = () => {
+    const name = event.target.name;
+    const value = event.target.value;
+
+    setData((data) => ({ ...data, [name]: value }));
+  };
+
+  const onSubmitHandler = (event) => {
+    event.preventDefault();
+  };
   const cartItems = foodList.filter((food) => quantities[food.id] > 0);
   const { tax, total, shippingCharge } = calculateCartTotal(
     cartItems,
