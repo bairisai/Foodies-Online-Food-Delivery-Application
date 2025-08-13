@@ -12,7 +12,6 @@ A **full-stack online food delivery platform** with **Admin Panel**, **User Web 
 ## 📑 Table of Contents
 - [✨ Features](#-features)
 - [🛠️ Tech Stack](#️-tech-stack)
-- [📂 Project Structure](#-project-structure)
 - [⚙️ Installation & Setup](#️-installation--setup)
 - [🔐 Environment Variables](#-environment-variables)
 
@@ -63,10 +62,6 @@ A **full-stack online food delivery platform** with **Admin Panel**, **User Web 
 **Storage:** Amazon S3  
 **Payments:** Razorpay  
 **Authentication:** JWT
-
----
-
-## 📂 Project Structure
 
 ---
 
